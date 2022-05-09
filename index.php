@@ -4,6 +4,7 @@ session_start();
   //password protection for this page (yes, this is very poor security, 
   //but there's not much trouble anyone can get into if they hack this)
   $correct_pwd = "password";
+  $password_required = true;
 
   // Database Connection Information
   $dbhost = '127.0.0.1';
@@ -136,7 +137,7 @@ session_start();
   }
 
   //kick anyone out who isn't supposed to be here
-  if ( !isset($_SESSION['login']) ) {
+  if ( !isset($_SESSION['login']) && $password_required ) {
       echo '
       <form action="index.php" method="post">
         <input type="password" id="pwd" name="pwd" />
