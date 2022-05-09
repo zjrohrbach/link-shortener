@@ -183,14 +183,4 @@ session_start();
 
 <?php
   mysqli_close( $connection );
-
-//todo
-/*
-- match rohrsci theming
-- pretty-ify lists
-- determine if any functions can be defined
-- better error handling
-- copy-to-clipboard option
-- .htaccess
-*/
 ?>
