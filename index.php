@@ -22,18 +22,22 @@ session_start();
 <!doctype html>
 <html lang="en">
   <head>
+
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>URL Shortener</title>
 
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <!-- UIkit CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.14.1/dist/css/uikit.min.css" />
+
+    <!-- UIkit JS -->
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.14.1/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.14.1/dist/js/uikit-icons.min.js"></script>
+
   </head>
   <body>
 
-    <div class="container">
+    <div class="uk-container">
       <h1>Link Shortener</h1>
 
       <?php
@@ -153,10 +157,10 @@ session_start();
         //kick anyone out who isn't supposed to be here
         if ( !isset($_SESSION['login']) && $password_required ) {
             echo '
-            <form class="form-inline" action="index.php" method="post">
-              <div class="form-group">
-                <input class="form-control" type="password" id="pwd" name="pwd" />
-                <input class="btn btn-primary" type="submit" value="Login" />
+            <form action="index.php" method="post">
+              <div>
+                <input type="password" id="pwd" name="pwd" />
+                <input type="submit" value="Login" />
               </div>
             </form>
             ';
@@ -166,20 +170,14 @@ session_start();
       ?>
 
       <h2>Shorten a new link</h2>
-      <form class="form-inline" action="index.php" method="post">
-        <div class="form-group">
-          <label class="sr-only" for="url">url:</label> 
-            <div class="input-group">
-              <div class="input-group-addon">url:</div>
-              <input class="form-control" type="url" id="url" name="url" pattern="https?://.+" placeholder="https://" required />
-            </div>
-          <label class="sr-only" for="slug">slug:</label> 
-          <div class="input-group">
-            <div class="input-group-addon">slug:</div>
-            <input class="form-control" type="text" id="slug" name="slug" pattern="[0-9a-zA-Z\-]+" required />
-          </div>
-          <input class="btn btn-primary" type="submit" value="Submit" />
-        </div>
+      <form action="index.php" method="post">
+        <label for="url">url:</label> 
+        <input type="url" id="url" name="url" pattern="https?://.+" placeholder="https://" required />
+        
+        <label for="slug">slug:</label> 
+        <input type="text" id="slug" name="slug" pattern="[0-9a-zA-Z\-]+" required />
+
+        <input type="submit" value="Submit" />
       </form>
 
       <h2>Active slugs and redirects</h2>
