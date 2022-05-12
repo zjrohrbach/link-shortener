@@ -168,6 +168,7 @@ session_start();
         }
 
       ?>
+
       <section class="uk-section uk-section-muted uk-section-large uk-padding-remove-vertical"> 
         <h2>Shorten a new link</h2>
         <form action="index.php" method="post">
@@ -189,7 +190,7 @@ session_start();
 
       <h2>Active slugs and redirects</h2>
 
-      <div class="uk-grid-small" uk-grid>
+      <div class="uk-grid-small uk-child-width-1-4@m" uk-grid>
       <?php
         //pull all the slug-link pairs for display
         $query = '
@@ -203,21 +204,21 @@ session_start();
 
         while ( $row = mysqli_fetch_array( $result ) ) {
           echo '
-          <div class="uk-card uk-card-body uk-card-default uk-width-medium uk-card-hover">
-          <h3 class="uk-card-title">' . $row['slug'] . '</h3>
-          <p><a href="' . $row['url'] . '">' . $row['url'] . '</a><a href="index.php?delete=' . $row['link_id'] . '" class="uk-card-badge uk-label uk-label-danger" uk-close></a></p>
-          <p>[<a href="index.php?detail=' . $row['link_id'] . '">list visitors</a>]</p>
-          <ul>
-            <li>Date Created: ' . $row['date_created'] . '</li>
-            <li>Number of Visits: ' . $row['num_visits'] . '</li>
-            <li>Last Visit: ' . $row['last_visit'] . '</li>
-          </ul>
+          <div class="uk-margin-left uk-margin-bottom uk-card uk-card-body uk-card-default uk-card-hover">
+            <h3 class="uk-card-title">' . $row['slug'] . '</h3>
+            <p><a href="' . $row['url'] . '">' . $row['url'] . '</a><a href="index.php?delete=' . $row['link_id'] . '" class="uk-card-badge uk-label uk-label-danger" uk-close></a></p>
+            <p><a href="index.php?detail=' . $row['link_id'] . '"><span uk-icon="list"></span></a></p>
+            <ul>
+              <li>Date Created: ' . $row['date_created'] . '</li>
+              <li>Number of Visits: ' . $row['num_visits'] . '</li>
+              <li>Last Visit: ' . $row['last_visit'] . '</li>
+            </ul>
           </div>
           ';
         }
 
       ?>
-      
+
       </div>
     </div>
   </body>
