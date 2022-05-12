@@ -168,20 +168,28 @@ session_start();
         }
 
       ?>
-
-      <h2>Shorten a new link</h2>
-      <form action="index.php" method="post">
-        <label for="url">url:</label> 
-        <input type="url" id="url" name="url" pattern="https?://.+" placeholder="https://" required />
-        
-        <label for="slug">slug:</label> 
-        <input type="text" id="slug" name="slug" pattern="[0-9a-zA-Z\-]+" required />
-
-        <input type="submit" value="Submit" />
-      </form>
+      <section class="uk-section uk-section-muted uk-section-large uk-padding-remove-vertical"> 
+        <h2>Shorten a new link</h2>
+        <form action="index.php" method="post">
+          <div class="uk-grid uk-grid-small">
+            <div>
+              <label class="uk-form-label" for="url">url:</label> 
+              <input class="uk-form-input" type="url" id="url" name="url" pattern="https?://.+" placeholder="https://" required />
+            </div>
+            <div>
+              <label class="uk-form-label" for="slug">slug:</label> 
+              <input class="uk-form-input" type="text" id="slug" name="slug" pattern="[0-9a-zA-Z\-]+" required />
+            </div>
+            <div>
+              <input class="uk-button uk-button-primary uk-button-small" type="submit" value="Submit" />
+            </div>
+          </div>
+        </form>
+      </section>
 
       <h2>Active slugs and redirects</h2>
-      <ul>
+
+      <div class="uk-grid-small" uk-grid>
       <?php
         //pull all the slug-link pairs for display
         $query = '
@@ -194,17 +202,23 @@ session_start();
 
 
         while ( $row = mysqli_fetch_array( $result ) ) {
-          echo '<li>' . $row['slug'] . ' -> <a href="' . $row['url'] . '">' . $row['url'] . '</a> [<a href="index.php?detail=' . $row['link_id'] . '">list visitors</a>] [<a href="index.php?delete=' . $row['link_id'] . '">x</a>]
+          echo '
+          <div class="uk-card uk-card-body uk-card-default uk-width-medium uk-card-hover">
+          <h3 class="uk-card-title">' . $row['slug'] . '</h3>
+          <p><a href="' . $row['url'] . '">' . $row['url'] . '</a><a href="index.php?delete=' . $row['link_id'] . '" class="uk-card-badge uk-label uk-label-danger" uk-close></a></p>
+          <p>[<a href="index.php?detail=' . $row['link_id'] . '">list visitors</a>]</p>
           <ul>
             <li>Date Created: ' . $row['date_created'] . '</li>
             <li>Number of Visits: ' . $row['num_visits'] . '</li>
             <li>Last Visit: ' . $row['last_visit'] . '</li>
           </ul>
-          </li>';
+          </div>
+          ';
         }
 
       ?>
-      </ul>
+      
+      </div>
     </div>
   </body>
 </html>
