@@ -5,6 +5,7 @@ session_start();
   //but there's not much trouble anyone can get into if they hack this)
   $correct_pwd = "password";
   $password_required = false;
+  $base_url = "http://127.0.0.1:8000/index.php?goto=";
 
   // Database Connection Information
   $dbhost = '127.0.0.1';
@@ -34,6 +35,22 @@ session_start();
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.14.1/dist/js/uikit.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.14.1/dist/js/uikit-icons.min.js"></script>
 
+    <script>
+      function copyText(inputID) {
+        /* Get the text field */
+        var textForClipboard = document.getElementById(inputID);
+
+        /* Select the text field */
+        textForClipboard.select();
+        textForClipboard.setSelectionRange(0, 99999); /* For mobile devices */
+
+        /* Copy the text inside the text field */
+        navigator.clipboard.writeText(textForClipboard.value);
+
+        /* Alert the copied text */
+        alert("Copied the text: " + textForClipboard.value);
+      } 
+    </script>
   </head>
   <body>
 
@@ -190,7 +207,7 @@ session_start();
 
       <h2>Active slugs and redirects</h2>
 
-      <div class="uk-grid-small uk-child-width-1-4@m" uk-grid>
+      <div class="uk-grid-small uk-child-width-1-2@m" uk-grid>
       <?php
         //pull all the slug-link pairs for display
         $query = '
@@ -206,8 +223,21 @@ session_start();
           echo '
           <div class="uk-margin-left uk-margin-bottom uk-card uk-card-body uk-card-default uk-card-hover">
             <h3 class="uk-card-title">' . $row['slug'] . '</h3>
-            <p><a href="' . $row['url'] . '">' . $row['url'] . '</a><a href="index.php?delete=' . $row['link_id'] . '" class="uk-card-badge uk-label uk-label-danger" uk-close></a></p>
-            <p><a href="index.php?detail=' . $row['link_id'] . '"><span uk-icon="list"></span></a></p>
+            <p class="uk-text-muted uk-text-small">' . $row['url'] . '</p>
+            <div class="uk-height-match uk-grid">
+              <div class="uk-width-expand">
+                <input type="text" 
+                id="copy-' . $row['link_id'] . '" 
+                class="uk-input uk-form-small uk-width-expand"
+                value="' . $base_url . $row['slug'] . '"
+                disabled />
+              </div>
+              <div class="uk-width-auto uk-margin-remove">
+                <a href="javascript:copyText(\'copy-' . $row['link_id'] . '\')"><span uk-icon="copy"></span></a>
+                <a href="index.php?detail=' . $row['link_id'] . '" class="uk-label"><span uk-icon="list"></span></a>
+                <a href="index.php?delete=' . $row['link_id'] . '" class="uk-label uk-label-danger" uk-close></a>
+              </div>
+            </div>
             <ul>
               <li>Date Created: ' . $row['date_created'] . '</li>
               <li>Number of Visits: ' . $row['num_visits'] . '</li>
