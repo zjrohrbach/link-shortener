@@ -6,6 +6,7 @@ session_start();
   $correct_pwd = "password";
   $password_required = false;
   $base_url = "http://127.0.0.1:8000/index.php?goto=";
+  $alert_timeout = 3000;
 
   // Database Connection Information
   $dbhost = '127.0.0.1';
@@ -48,7 +49,11 @@ session_start();
         navigator.clipboard.writeText(textForClipboard.value);
 
         /* Alert the copied text */
-        alert("Copied the text: " + textForClipboard.value);
+        UIkit.notification({
+                      message: "Copied to clipboard",
+                      status: "success",
+                      timeout: <?php echo $alert_timeout ?>
+                    });
       } 
 
       function cleanupHistory () {
@@ -106,7 +111,17 @@ session_start();
 
           if ( $row[0] != 0 ) {
 
-            echo "That slug's taken!";
+            echo '
+              <script>
+                window.onload = function sendAlert() {
+                  UIkit.notification({
+                    message: "Unfortunately, the slug <em>' . $_POST['slug'] . '</em> has already been taken.",
+                    status: "danger",
+                    timeout: ' . $alert_timeout . '
+                  });
+                }
+              </script>
+            ';
 
           } else {
 
@@ -114,9 +129,33 @@ session_start();
             $result = mysqli_query( $connection, $query );    
           
           if ( $result ) {
-            echo $_POST['slug'] . ' -> ' . $_POST['url'] . ' has been added.';
+
+            echo '
+              <script>
+                window.onload = function sendAlert() {
+                  UIkit.notification({
+                    message: "The url for <em>' . $_POST['slug'] . '</em> has been added.",
+                    status: "success",
+                    timeout: ' . $alert_timeout . '
+                  });
+                }
+              </script>
+            ';
+
             } else {
-              echo 'There was an error with the database: ' . mysqli_error( $result );
+
+              echo '
+                <script>
+                  window.onload = function sendAlert() {
+                    UIkit.notification({
+                      message: "There was an error with the database: ' . mysqli_error( $result ) . '",
+                      status: "danger",
+                      timeout: ' . $alert_timeout . '
+                    });
+                  }
+                </script>
+              ';
+            
             }
           } 
         }
@@ -127,9 +166,33 @@ session_start();
           $result = mysqli_query( $connection, $query );    
           
           if ( $result ) {
-              echo 'Record has been deleted.';
+
+              echo '
+                <script>
+                  window.onload = function sendAlert() {
+                    UIkit.notification({
+                      message: "The record has been deleted.",
+                      status: "warning",
+                      timeout: ' . $alert_timeout . '
+                    });
+                  }
+                </script>
+              ';
+
           } else {
-              echo 'There was an error with the database: ' . mysqli_error( $result );
+
+            echo '
+              <script>
+                window.onload = function sendAlert() {
+                  UIkit.notification({
+                    message: "There was an error with the database: ' . mysqli_error( $result ) . '",
+                    status: "danger",
+                    timeout: ' . $alert_timeout . '
+                  });
+                }
+              </script>
+            ';
+
           }
         }
 
