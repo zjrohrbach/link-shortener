@@ -141,7 +141,7 @@ session_start();
 
           $array = array();
           
-          while ( $row = mysqli_fetcgih_array( $result ) ) {
+          while ( $row = mysqli_fetch_array( $result ) ) {
               $slug = $row['slug'];
               $url = $row['url'];
               $date_created = $row['date_created'];
@@ -235,7 +235,22 @@ session_start();
               <div class="uk-width-auto">
                 <a href="javascript:copyText(\'copy-' . $row['link_id'] . '\')"><span uk-icon="copy"></span></a>
                 <a href="index.php?detail=' . $row['link_id'] . '" class="uk-label"><span uk-icon="list"></span></a>
-                <a href="index.php?delete=' . $row['link_id'] . '" class="uk-label uk-label-danger" uk-close></a>
+              </div>
+            </div>
+            <div>
+              <button type="button" class="uk-button uk-label uk-label-danger"><span uk-icon="close"></span></button>
+              <div class="uk-width-5-6" uk-drop="mode: click; pos: top-left">
+                <div class="uk-card uk-card-body uk-card-default uk-padding-remove-bottom uk-background-muted">
+                  <div>
+                    <div class="uk-padding-remove">
+                      Are you sure you want to delete <em>' . $row['slug'] . '</em>?
+                    </div>
+                    <div class="uk-align-right uk-padding-remove">
+                      <a href="index.php?delete=' . $row['link_id'] . '" class="uk-label uk-drop-close">Cancel</a>
+                      <a href="index.php?delete=' . $row['link_id'] . '" class="uk-label uk-label-danger">Delete</a>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <ul>
