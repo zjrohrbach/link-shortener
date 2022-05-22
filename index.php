@@ -233,21 +233,20 @@ session_start();
                 value="' . $base_url . $row['slug'] . '"
                 disabled />
               </div>
-              
-              <div class="uk-width-auto">
+              <div class="uk-width-auto uk-padding-remove">
                 <a href="javascript:copyText(\'copy-' . $row['link_id'] . '\')" uk-tooltip="copy shortened url"><span uk-icon="copy"></span></a>
-                <a href="index.php?detail=' . $row['link_id'] . '" class="uk-label" uk-tooltip="visit details"><span uk-icon="list"></span></a>
               </div>
 
               <div class="uk-width-auto">
+                <a href="index.php?detail=' . $row['link_id'] . '" class="uk-label" uk-tooltip="visit details"><span uk-icon="list"></span></a>
                 <button type="button" class="uk-button uk-label uk-label-danger" uk-tooltip="delete this url"><span uk-icon="close"></span></button>
                 <div class="uk-width-5-6" uk-drop="mode: click; pos: top-right">
                   <div class="uk-card uk-card-body uk-card-default uk-background-muted">
                     <div class="uk-padding-remove">
                       Are you sure you want to delete <em>' . $row['slug'] . '</em>?
                     </div>
-                    <div class="uk-align-right uk-padding-remove">
-                      <a href="index.php?delete=' . $row['link_id'] . '" class="uk-label uk-drop-close">Cancel</a>
+                    <div class="uk-align-right">
+                      <a class="uk-label uk-drop-close">Cancel</a>
                       <a href="index.php?delete=' . $row['link_id'] . '" class="uk-label uk-label-danger">Delete</a>
                     </div>
                   </div>
