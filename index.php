@@ -50,9 +50,14 @@ session_start();
         /* Alert the copied text */
         alert("Copied the text: " + textForClipboard.value);
       } 
+
+      function cleanupHistory () {
+        /* this function is for making it so that reloading the page doesn't re-submit data */
+        window.history.replaceState(null, null, 'index.php');
+      }
     </script>
   </head>
-  <body>
+  <body onload="cleanupHistory()">
 
     <div class="uk-container">
       <h1>Link Shortener</h1>
