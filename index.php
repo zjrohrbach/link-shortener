@@ -225,6 +225,7 @@ session_start();
             <h3 class="uk-card-title">' . $row['slug'] . '</h3>
             <p class="uk-text-small uk-overflow-hidden">' . $row['url'] . '</p>
             <div class="uk-height-match uk-grid">
+
               <div class="uk-width-expand">
                 <input type="text" 
                 id="copy-' . $row['link_id'] . '" 
@@ -232,16 +233,16 @@ session_start();
                 value="' . $base_url . $row['slug'] . '"
                 disabled />
               </div>
+              
               <div class="uk-width-auto">
-                <a href="javascript:copyText(\'copy-' . $row['link_id'] . '\')"><span uk-icon="copy"></span></a>
-                <a href="index.php?detail=' . $row['link_id'] . '" class="uk-label"><span uk-icon="list"></span></a>
+                <a href="javascript:copyText(\'copy-' . $row['link_id'] . '\')" uk-tooltip="copy shortened url"><span uk-icon="copy"></span></a>
+                <a href="index.php?detail=' . $row['link_id'] . '" class="uk-label" uk-tooltip="visit details"><span uk-icon="list"></span></a>
               </div>
-            </div>
-            <div>
-              <button type="button" class="uk-button uk-label uk-label-danger"><span uk-icon="close"></span></button>
-              <div class="uk-width-5-6" uk-drop="mode: click; pos: top-left">
-                <div class="uk-card uk-card-body uk-card-default uk-padding-remove-bottom uk-background-muted">
-                  <div>
+
+              <div class="uk-width-auto">
+                <button type="button" class="uk-button uk-label uk-label-danger" uk-tooltip="delete this url"><span uk-icon="close"></span></button>
+                <div class="uk-width-5-6" uk-drop="mode: click; pos: top-right">
+                  <div class="uk-card uk-card-body uk-card-default uk-background-muted">
                     <div class="uk-padding-remove">
                       Are you sure you want to delete <em>' . $row['slug'] . '</em>?
                     </div>
@@ -252,7 +253,9 @@ session_start();
                   </div>
                 </div>
               </div>
+
             </div>
+           
             <ul>
               <li>Date Created: ' . $row['date_created'] . '</li>
               <li>Number of Visits: ' . $row['num_visits'] . '</li>
