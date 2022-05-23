@@ -20,6 +20,17 @@ session_start();
     die( "Could not connect to database: " . mysqli_error($connection) );
   }
 
+  function print_alert_js ( $message, $status ) {
+    echo '
+      <script>
+        sendAlert(
+          "' . $message . '",
+          "' . $status . '"
+        );
+      </script>
+    ';
+  }
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -37,6 +48,16 @@ session_start();
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.14.1/dist/js/uikit-icons.min.js"></script>
 
     <script>
+
+      function sendAlert(thisMessage, thisStatus) {
+        /* function for sending alert to UIKit */
+        UIkit.notification({
+                    message: thisMessage,
+                    status: thisStatus,
+                    timeout: <?php echo $alert_timeout; ?>
+        });
+      }
+      
       function copyText(inputID) {
         /* Get the text field */
         var textForClipboard = document.getElementById(inputID);
@@ -49,17 +70,14 @@ session_start();
         navigator.clipboard.writeText(textForClipboard.value);
 
         /* Alert the copied text */
-        UIkit.notification({
-                      message: "Copied to clipboard",
-                      status: "success",
-                      timeout: <?php echo $alert_timeout ?>
-                    });
+        sendAlert("Copied to clipboard.", "success");
       } 
 
       function cleanupHistory () {
         /* this function is for making it so that reloading the page doesn't re-submit data */
         window.history.replaceState(null, null, 'index.php');
       }
+
     </script>
   </head>
   <body onload="cleanupHistory()">
@@ -111,50 +129,29 @@ session_start();
 
           if ( $row[0] != 0 ) {
 
-            echo '
-              <script>
-                window.onload = function sendAlert() {
-                  UIkit.notification({
-                    message: "Unfortunately, the slug <em>' . $_POST['slug'] . '</em> has already been taken.",
-                    status: "danger",
-                    timeout: ' . $alert_timeout . '
-                  });
-                }
-              </script>
-            ';
+            print_alert_js (
+              'Unfortunately, the slug <em>' . $_POST['slug'] . '</em> has already been taken.',
+              'danger'
+            );
 
           } else {
 
             $query = 'INSERT INTO redirects (slug, url, date_created) VALUES ("' . $_POST['slug'] . '", "' . $_POST['url'] . '", NOW() );';
             $result = mysqli_query( $connection, $query );    
           
-          if ( $result ) {
+            if ( $result ) {
 
-            echo '
-              <script>
-                window.onload = function sendAlert() {
-                  UIkit.notification({
-                    message: "The url for <em>' . $_POST['slug'] . '</em> has been added.",
-                    status: "success",
-                    timeout: ' . $alert_timeout . '
-                  });
-                }
-              </script>
-            ';
+              print_alert_js (
+                'The url for <em>' . $_POST['slug'] . '</em> has been added.',
+                'success'
+              );
 
             } else {
 
-              echo '
-                <script>
-                  window.onload = function sendAlert() {
-                    UIkit.notification({
-                      message: "There was an error with the database: ' . mysqli_error( $result ) . '",
-                      status: "danger",
-                      timeout: ' . $alert_timeout . '
-                    });
-                  }
-                </script>
-              ';
+              print_alert_js (
+                'There was an error with the database: ' . mysqli_error( $result ),
+                'danger'
+              );
             
             }
           } 
@@ -167,31 +164,17 @@ session_start();
           
           if ( $result ) {
 
-              echo '
-                <script>
-                  window.onload = function sendAlert() {
-                    UIkit.notification({
-                      message: "The record has been deleted.",
-                      status: "warning",
-                      timeout: ' . $alert_timeout . '
-                    });
-                  }
-                </script>
-              ';
+            print_alert_js (
+              'The record has been deleted',
+              'warning'
+            );
 
           } else {
 
-            echo '
-              <script>
-                window.onload = function sendAlert() {
-                  UIkit.notification({
-                    message: "There was an error with the database: ' . mysqli_error( $result ) . '",
-                    status: "danger",
-                    timeout: ' . $alert_timeout . '
-                  });
-                }
-              </script>
-            ';
+            print_alert_js (
+              'There was an error with the database: ' . mysqli_error( $result ),
+              'danger'
+            );
 
           }
         }
