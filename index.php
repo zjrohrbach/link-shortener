@@ -203,13 +203,28 @@ session_start();
               }
           }
 
-          echo "<h2>Visits to '<em>$slug</em>' ($url)</h2>";
-          echo "\n<ul>";
+
+          echo '
+            <div id="detail-modal" uk-modal>
+              <div class="uk-modal-dialog uk-modal-body">
+                <button class="uk-modal-close-default" type="button" uk-close></button>
+                <h2 class="uk-modal-title">Visits to <em>' . $slug . '</em></h2>
+                <p class="uk-text-small uk-overflow-hidden">' . $url . '</p>
+                <ul>
+          ';
 
           foreach ( $array as $record ) {
             echo $record;
           }
           echo "\n</ul>";
+
+          echo '
+              </div>
+            </div>
+            <script>
+              UIkit.modal("#detail-modal").show();
+            </script>
+          ';
 
         }
 
@@ -243,11 +258,16 @@ session_start();
           <div class="uk-grid uk-grid-small">
             <div>
               <label class="uk-form-label" for="url">url:</label> 
-              <input class="uk-form-input" type="url" id="url" name="url" pattern="https?://.+" placeholder="https://" required />
+              <input class="uk-form-input" type="url" id="url" name="url" 
+                pattern="https?://.+" 
+                placeholder="https://" 
+                required />
             </div>
             <div>
               <label class="uk-form-label" for="slug">slug:</label> 
-              <input class="uk-form-input" type="text" id="slug" name="slug" pattern="[0-9a-zA-Z\-]+" required />
+              <input class="uk-form-input" type="text" id="slug" name="slug" 
+                pattern="[0-9a-zA-Z\-]+" 
+                required />
             </div>
             <div>
               <input class="uk-button uk-button-primary uk-button-small" type="submit" value="Submit" />
