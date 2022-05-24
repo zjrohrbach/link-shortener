@@ -73,14 +73,12 @@ session_start();
         sendAlert("Copied to clipboard.", "success");
       } 
 
-      function cleanupHistory () {
-        /* this function is for making it so that reloading the page doesn't re-submit data */
-        window.history.replaceState(null, null, 'index.php');
-      }
+      /* this makes it so that reloading the page doesn't re-submit data */
+      window.history.replaceState(null, null, 'index.php');
 
     </script>
   </head>
-  <body onload="cleanupHistory()">
+  <body>
 
     <div class="uk-container">
       <h1>Link Shortener</h1>
@@ -133,6 +131,17 @@ session_start();
               'Unfortunately, the slug <em>' . $_POST['slug'] . '</em> has already been taken.',
               'danger'
             );
+
+            echo '
+              <script>
+                window.onload = function() {
+                  document.getElementById("url").value = "' . $_POST['url'] . '";
+                  document.getElementById("slug").value = "' . $_POST['slug'] . '";
+                  document.getElementById("slug").classList.add("uk-form-danger");
+                  alert("foo");
+                }
+              </script>
+            ';
 
           } else {
 
@@ -240,7 +249,7 @@ session_start();
         //kick anyone out who isn't supposed to be here
         if ( !isset($_SESSION['login']) && $password_required ) {
             echo '
-            <form action="index.php" method="post">
+            <form action="index.php" method="post" id="url-slug-data">
               <div>
                 <input type="password" id="pwd" name="pwd" />
                 <input type="submit" value="Login" />
