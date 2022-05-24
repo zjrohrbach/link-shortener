@@ -134,11 +134,11 @@ session_start();
 
             echo '
               <script>
+                /*repopulate form values*/
                 window.onload = function() {
                   document.getElementById("url").value = "' . $_POST['url'] . '";
                   document.getElementById("slug").value = "' . $_POST['slug'] . '";
                   document.getElementById("slug").classList.add("uk-form-danger");
-                  alert("foo");
                 }
               </script>
             ';
@@ -249,7 +249,7 @@ session_start();
         //kick anyone out who isn't supposed to be here
         if ( !isset($_SESSION['login']) && $password_required ) {
             echo '
-            <form action="index.php" method="post" id="url-slug-data">
+            <form action="index.php" method="post">
               <div>
                 <input type="password" id="pwd" name="pwd" />
                 <input type="submit" value="Login" />
@@ -267,14 +267,14 @@ session_start();
           <div class="uk-grid uk-grid-small">
             <div>
               <label class="uk-form-label" for="url">url:</label> 
-              <input class="uk-form-input" type="url" id="url" name="url" 
+              <input class="uk-form-input uk-form-width-large" type="url" id="url" name="url" 
                 pattern="https?://.+" 
                 placeholder="https://" 
                 required />
             </div>
             <div>
               <label class="uk-form-label" for="slug">slug:</label> 
-              <input class="uk-form-input" type="text" id="slug" name="slug" 
+              <input class="uk-form-input uk-form-width-small" type="text" id="slug" name="slug" 
                 pattern="[0-9a-zA-Z\-]+" 
                 required />
             </div>
@@ -295,7 +295,8 @@ session_start();
             FROM redirects
             LEFT JOIN visits
             ON redirects.link_id = visits.link_id
-          GROUP BY link_id;';
+          GROUP BY link_id
+          ORDER BY redirects.date_created DESC;';
         $result = mysqli_query( $connection, $query );
 
 
