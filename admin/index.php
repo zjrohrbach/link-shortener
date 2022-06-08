@@ -133,12 +133,12 @@ include 'functions.php';
             FROM redirects
             LEFT JOIN visits
             ON redirects.link_id = visits.link_id
-          GROUP BY link_id
+          GROUP BY redirects.link_id
           ORDER BY redirects.date_created DESC;';
-        $result = mysqli_query( $connection, $query );
+        $result = $connection->query($query);
 
 
-        while ( $row = mysqli_fetch_array( $result ) ) {
+        while ( $row = $result->fetchArray() ) {
           echo '
           <div class="uk-margin-left uk-card uk-card-body uk-card-default uk-card-hover">
             <h3 class="uk-card-title">' . $row['slug'] . '</h3>
@@ -189,6 +189,4 @@ include 'functions.php';
     </div>
   </body>
 </html>
-<?php
-  mysqli_close( $connection );
-?>
+<?php $connection->close() ?>

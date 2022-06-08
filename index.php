@@ -37,6 +37,4 @@ include 'admin/functions.php';
     </div>
   </body>
 </html>
-<?php
-  mysqli_close( $connection );
-?>
+<?php $connection->close() ?>
