@@ -70,7 +70,7 @@
       } else {
 
         //if slug doesn't exist
-        http_response_code(400);
+        echo 'That is an invalid slug.';
         exit();
 
       }

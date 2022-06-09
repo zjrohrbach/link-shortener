@@ -9,7 +9,7 @@ if ( isset( $_GET['goto'] ) ) {
 
 } else {
 
-  http_response_code(404);
+  echo "Redirect slug not given.";
 
 }
 
