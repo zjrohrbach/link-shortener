@@ -65,11 +65,13 @@
         
         //redirect
         header( 'Location: ' . $redirect_link );
+        exit();
 
       } else {
 
-        //if slug doesn't exit
-        echo "Unfortunately, that is an invalid link.";
+        //if slug doesn't exist
+        http_response_code(400);
+        exit();
 
       }
 
