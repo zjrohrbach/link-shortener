@@ -18,7 +18,12 @@
     echo 'Connection to database failed: ' . $connection->connect_error;
   }
 
-  $connection->query('USE ' . $dbname . ';');
+  //this is defined as a function so it does not need to be called by `db_initialize.php`
+  function use_this_db() {
+    global $connection, $dbname;
+
+    $connection->query('USE ' . $dbname . ';');
+  }
 
 
   //================== SEND ALERT TO UIKIT ==============================

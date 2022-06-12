@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'functions.php';
+use_this_db();
 ?>
 <!doctype html>
 <html lang="en">
@@ -44,7 +45,7 @@ include 'functions.php';
       } 
 
       /* this makes it so that reloading the page doesn't re-submit data */
-      window.history.replaceState(null, null, 'index.php');
+      window.history.replaceState(null, null, 'admin.php');
 
     </script>
   </head>
@@ -87,7 +88,7 @@ include 'functions.php';
         //kick anyone out who isn't supposed to be here
         if ( !isset($_SESSION['login']) && $password_required ) {
           echo '
-            <form action="index.php" method="post">
+            <form action="admin.php" method="post">
               <div>
                 <input type="password" id="pwd" name="pwd" />
                 <input type="submit" value="Login" />
@@ -101,7 +102,7 @@ include 'functions.php';
 
       <section class="uk-section uk-section-muted uk-section-large uk-padding-remove-vertical"> 
         <h2>Shorten a new link</h2>
-        <form action="index.php" method="post">
+        <form action="admin.php" method="post">
           <div class="uk-grid uk-grid-small">
             <div>
               <label class="uk-form-label" for="url">url:</label> 
@@ -156,7 +157,7 @@ include 'functions.php';
               </div>
 
               <div class="uk-width-auto">
-                <a href="index.php?detail=' . $row['link_id'] . '" class="uk-label" uk-tooltip="visit details"><span uk-icon="list"></span></a>
+                <a href="admin.php?detail=' . $row['link_id'] . '" class="uk-label" uk-tooltip="visit details"><span uk-icon="list"></span></a>
                 <button type="button" class="uk-button uk-label uk-label-danger" uk-tooltip="delete this url"><span uk-icon="close"></span></button>
                 <div class="uk-width-5-6" uk-drop="mode: click; pos: top-right">
                   <div class="uk-card uk-card-body uk-card-default uk-background-muted">
@@ -165,7 +166,7 @@ include 'functions.php';
                     </div>
                     <div class="uk-align-right">
                       <a class="uk-label uk-drop-close">Cancel</a>
-                      <a href="index.php?delete=' . $row['link_id'] . '" class="uk-label uk-label-danger">Delete</a>
+                      <a href="admin.php?delete=' . $row['link_id'] . '" class="uk-label uk-label-danger">Delete</a>
                     </div>
                   </div>
                 </div>
@@ -177,6 +178,7 @@ include 'functions.php';
               <li>Date Created: ' . $row['date_created'] . '</li>
               <li>Number of Visits: ' . $row['num_visits'] . '</li>
               <li>Last Visit: ' . $row['last_visit'] . '</li>
+              <li><a href="' . $base_url . $row['slug'] . '">Goto</a></li>
             </ul>
           </div>
           ';

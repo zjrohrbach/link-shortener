@@ -1,4 +1,0 @@
-AuthName "Password Required"
-AuthType Basic
-AuthUserFile /path/to/.htpasswd
-Require valid-user

@@ -1,6 +1,8 @@
 <?php
 session_start();
-include 'admin/functions.php';
+include 'functions.php';
+use_this_db();
+
 
 //check that we've been given a slug to resolve
 if ( isset( $_GET['goto'] ) ) {
