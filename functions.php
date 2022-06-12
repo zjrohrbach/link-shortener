@@ -7,11 +7,6 @@
   $dbpass = 'rohrbachsci';
   $dbname = 'links';
 
-  //password protection for this page (this is very poor security)
-  //(it is recommended that you use Apache or Nginx's security instead)
-  $correct_pwd = "password";
-  $password_required = false;
-
   $connection = new mysqli($dbhost, $dbuser, $dbpass);
 
   if ($connection->connect_error) {

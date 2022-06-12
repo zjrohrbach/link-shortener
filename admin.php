@@ -1,5 +1,4 @@
 <?php
-session_start();
 include 'functions.php';
 use_this_db();
 ?>
@@ -74,28 +73,6 @@ use_this_db();
           
           show_details ( $_GET['detail'] );
 
-        }
-
-        //process login
-        if ( isset( $_POST['pwd'] ) ) {
-          if ( $_POST['pwd'] == $correct_pwd ) {
-            $_SESSION['login'] = true;
-          } else {
-              echo "Incorrect Login.";
-          }
-        }
-
-        //kick anyone out who isn't supposed to be here
-        if ( !isset($_SESSION['login']) && $password_required ) {
-          echo '
-            <form action="admin.php" method="post">
-              <div>
-                <input type="password" id="pwd" name="pwd" />
-                <input type="submit" value="Login" />
-              </div>
-            </form>
-          ';
-          exit;
         }
 
       ?>
@@ -178,7 +155,7 @@ use_this_db();
               <li>Date Created: ' . $row['date_created'] . '</li>
               <li>Number of Visits: ' . $row['num_visits'] . '</li>
               <li>Last Visit: ' . $row['last_visit'] . '</li>
-              <li><a href="' . $base_url . $row['slug'] . '">Goto</a></li>
+              <li><a href="">Goto</a></li>
             </ul>
           </div>
           ';
