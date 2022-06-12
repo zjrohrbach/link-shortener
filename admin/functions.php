@@ -2,19 +2,24 @@
   //config
   $base_url = "http://localhost:3000/index.php?goto=";
   $alert_timeout = 3000;
-  $link_to_database = __DIR__ . '/links.db';
+  $dbhost = 'localhost';
+  $dbuser = 'link-maker';
+  $dbpass = 'rohrbachsci';
+  $dbname = 'links';
 
   //password protection for this page (this is very poor security)
   //(it is recommended that you use Apache or Nginx's security instead)
   $correct_pwd = "password";
   $password_required = false;
 
+  $connection = new mysqli($dbhost, $dbuser, $dbpass);
 
-  $connection = new SQLite3($link_to_database);
-
-  if ( ! $connection ) {
-    die( "Could not connect to database: " . $connection->lastErrorMsg() );
+  if ($connection->connect_error) {
+    echo 'Connection to database failed: ' . $connection->connect_error;
   }
+
+  $connection->query('USE ' . $dbname . ';');
+
 
   //================== SEND ALERT TO UIKIT ==============================
   function print_alert_js ( $message, $status ) {
@@ -33,47 +38,36 @@
     global $connection;
 
     //find the db entry for the slug
-    $query = 'SELECT `url`, `link_id` FROM `redirects` WHERE `slug` = :slug;';
+    $query = 'SELECT url, link_id FROM redirects WHERE slug = ?;';
     $statement = $connection->prepare($query);
-    $statement->bindValue(':slug', $slug);
-    $result = $statement->execute();
-    $slug_exists = false;
+    $statement->bind_param('s', $slug);
+    $statement->execute();
+    $result = $statement->get_result();  //->fetch_row();
 
-    while ( $row = $result->fetchArray() ) {
-      $redirect_link = $row[0];
-      $link_id = $row[1];
-      $slug_exists = true;
+    if ( $result->num_rows == 1 ) {
+      //this if statement makes sure the url exists
+      $row = $result->fetch_assoc();
+      $redirect_link = $row['url'];
+      $link_id = $row['link_id'];
+
+      // set referer and ip address if given; otherwise say so
+      $referer = ( isset( $_SERVER['HTTP_REFERER'] ) ) ? filter_var($_SERVER['HTTP_REFERER'], FILTER_VALIDATE_URL) : 'unreferred';
+      $ip_addr = ( isset( $_SERVER['REMOTE_ADDR'] ) ) ? $ip_addr = filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP) : 'unknown';
+
+      
+      //register the visit 
+      $query = 'INSERT INTO visits (link_id, referer, visit_date, ip_addr) VALUES (?, ?, NOW(), ?);';
+      $result = $connection->prepare($query);
+      $result->bind_param('iss', $link_id, $referer, $ip_addr);
+      $result->execute();
+
+      //redirect
+      header( 'Location: ' . $redirect_link );
+      exit();
+
+    } else {
+      echo "This slug doesn't exist!";
     }
-   
-
-    //make sure the slug exists
-      if ( $slug_exists ) {
-
-        if ( isset( $_SERVER['HTTP_REFERER'] ) ) {
-          $referer = $_SERVER['HTTP_REFERER'];
-        } else {
-          $referer = 'unreferred';
-        }
-        
-        //register the visit 
-        $query = 'INSERT INTO visits (link_id, referer, visit_date, ip_addr) VALUES (:link_id, :refer, DATETIME("now"), :ip);';
-        $result = $connection->prepare($query);
-        $result->bindValue(':link_id', $link_id);
-        $result->bindValue(':refer', $referer);
-        $result->bindValue(':ip', $_SERVER['REMOTE_ADDR']);
-        $result->execute();
-        
-        //redirect
-        header( 'Location: ' . $redirect_link );
-        exit();
-
-      } else {
-
-        //if slug doesn't exist
-        echo 'That is an invalid slug.';
-        exit();
-
-      }
 
   }
 
@@ -82,11 +76,12 @@
     global $connection;
 
     //make sure slug doesn't exist
-    $query = 'SELECT COUNT(slug) FROM redirects WHERE slug=:slug;';
+    $query = 'SELECT COUNT(slug) FROM redirects WHERE slug=?;';
     $statement = $connection->prepare($query);
-    $statement->bindValue(':slug', $slug);
-    $result = $statement->execute(); 
-    $row = $result->fetchArray();
+    $statement->bind_param('s', $slug);
+    $statement->execute();
+    $result = $statement->get_result(); 
+    $row = $result->fetch_row();
     
 
     if ( $row[0] != 0 ) {
@@ -109,10 +104,9 @@
 
     } else {
 
-      $query = 'INSERT INTO redirects (`slug`, `url`, `date_created`) VALUES (:slug, :url, DATETIME("now") );';
+      $query = 'INSERT INTO redirects (`slug`, `url`, `date_created`) VALUES (?, ?, NOW() );';
       $result = $connection->prepare($query);
-      $result->bindValue(':slug', $slug);
-      $result->bindValue(':url', $url);
+      $result->bind_param('ss', $slug, $url);
       $result->execute();
     
       if ( $result ) {
@@ -125,7 +119,7 @@
       } else {
 
         print_alert_js (
-          'There was an error with the database: ' . $connection->lastErrorMsg(),
+          'There was an error with the database.',
           'danger'
         );
       
@@ -137,22 +131,22 @@
   function delete_link ( $link_id ) {
     global $connection;
 
-    $query = 'DELETE FROM redirects WHERE link_id=:link_id;';
+    $query = 'DELETE FROM redirects WHERE link_id=?;';
     $result = $connection->prepare($query);
-    $result->bindValue(':link_id', $link_id);
+    $result->bind_param('i', $link_id);
     $result->execute();
         
         if ( $result ) {
 
           print_alert_js (
-            'The record has been deleted',
+            'The record has been deleted.',
             'warning'
           );
 
         } else {
 
           print_alert_js (
-            'There was an error with the database: ' . $connection->lastErrorMsg(),
+            'There was an error with the database.',
             'danger'
           );
 
@@ -168,15 +162,16 @@
               FROM redirects
               LEFT JOIN visits
             ON redirects.link_id = visits.link_id
-            WHERE redirects.link_id=:link_id
+            WHERE redirects.link_id=?
             ORDER BY visit_date DESC;';
     $statement = $connection->prepare($query);
-    $statement->bindValue(':link_id', $link_id);
-    $result = $statement->execute();
+    $statement->bind_param('i', $link_id);
+    $statement->execute();
+    $result = $statement->get_result();
 
     $array = array();
     
-    while ( $row = $result->fetchArray() ) {
+    while ( $row = $result->fetch_assoc() ) {
         $slug = $row['slug'];
         $url = $row['url'];
         $date_created = $row['date_created'];
@@ -200,7 +195,10 @@
     foreach ( $array as $record ) {
       echo $record;
     }
-    echo "\n</ul>";
+    echo '
+          <li>Created on ' . $date_created . '</li>
+        </ul>
+    ';
 
     echo '
         </div>

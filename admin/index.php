@@ -137,8 +137,7 @@ include 'functions.php';
           ORDER BY redirects.date_created DESC;';
         $result = $connection->query($query);
 
-
-        while ( $row = $result->fetchArray() ) {
+        while ( $row = $result->fetch_assoc() ) {
           echo '
           <div class="uk-margin-left uk-card uk-card-body uk-card-default uk-card-hover">
             <h3 class="uk-card-title">' . $row['slug'] . '</h3>
