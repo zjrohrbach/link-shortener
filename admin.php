@@ -155,7 +155,7 @@ use_this_db();
               <li>Date Created: ' . $row['date_created'] . '</li>
               <li>Number of Visits: ' . $row['num_visits'] . '</li>
               <li>Last Visit: ' . $row['last_visit'] . '</li>
-              <li><a href="">Goto</a></li>
+              <li><a href="' . $base_url . $row['slug'] . '">Goto</a></li>
             </ul>
           </div>
           ';
