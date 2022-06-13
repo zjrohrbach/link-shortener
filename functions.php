@@ -51,8 +51,8 @@
       $link_id = $row['link_id'];
 
       // set referer and ip address if given; otherwise say so
-      $referer = ( isset( $_SERVER['HTTP_REFERER'] ) ) ? filter_var($_SERVER['HTTP_REFERER'], FILTER_VALIDATE_URL) : 'unreferred';
-      $ip_addr = ( isset( $_SERVER['REMOTE_ADDR'] ) ) ? $ip_addr = filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP) : 'unknown';
+      $referer = ( isset( $_SERVER['HTTP_REFERER'] ) ) ? filter_var($_SERVER['HTTP_REFERER'], FILTER_SANITIZE_URL) : 'unreferred';
+      $ip_addr = ( filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP) ) ? $ip_addr = $_SERVER['REMOTE_ADDR']  : 'unknown';
 
       
       //register the visit 

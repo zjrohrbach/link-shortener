@@ -132,6 +132,9 @@ use_this_db();
               <div class="uk-width-auto uk-padding-remove">
                 <a href="javascript:copyText(\'copy-' . $row['link_id'] . '\')" uk-tooltip="copy shortened url"><span uk-icon="copy"></span></a>
               </div>
+              <div class="uk-width-auto uk-padding-remove">
+                <a href="' . $base_url . $row['slug'] . '" uk-tooltip="visit shortened link"><span uk-icon="link"></span></a>
+              </div>
 
               <div class="uk-width-auto">
                 <a href="admin.php?detail=' . $row['link_id'] . '" class="uk-label" uk-tooltip="visit details"><span uk-icon="list"></span></a>
@@ -155,7 +158,6 @@ use_this_db();
               <li>Date Created: ' . $row['date_created'] . '</li>
               <li>Number of Visits: ' . $row['num_visits'] . '</li>
               <li>Last Visit: ' . $row['last_visit'] . '</li>
-              <li><a href="' . $base_url . $row['slug'] . '">Goto</a></li>
             </ul>
           </div>
           ';
