@@ -21,7 +21,9 @@
       referer VARCHAR(2048),
       visit_date TIMESTAMP,
       ip_addr varchar (15),
-      FOREIGN KEY (link_id) REFERENCES redirects (link_id)
+      FOREIGN KEY (link_id) 
+        REFERENCES redirects (link_id)
+        ON DELETE CASCADE
     );
     '
   );
