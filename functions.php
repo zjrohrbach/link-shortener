@@ -59,7 +59,10 @@
       exit();
 
     } else {
-      echo "This slug doesn't exist!";
+      
+      http_response_code(404);
+      $code = "404 Not Found";
+      
     }
 
   }
