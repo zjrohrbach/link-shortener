@@ -116,7 +116,7 @@ include 'functions.php';
 
         while ( $row = $result->fetch_assoc() ) {
           echo '
-          <div class="uk-margin-left uk-card uk-card-body uk-card-default uk-card-hover">
+          <div class="uk-margin-left uk-padding-small uk-card uk-card-body uk-card-default uk-card-hover">
             <h3 class="uk-card-title">' . $row['slug'] . '</h3>
             <p class="uk-text-small uk-overflow-hidden">' . $row['url'] . '</p>
             <div class="uk-height-match uk-grid">
@@ -152,12 +152,12 @@ include 'functions.php';
               </div>
 
             </div>
-           
-            <ul>
-              <li>Date Created: ' . $row['date_created'] . '</li>
-              <li>Number of Visits: ' . $row['num_visits'] . '</li>
-              <li>Last Visit: ' . $row['last_visit'] . '</li>
-            </ul>
+
+            <div class="uk-grid uk-margin-small">
+              <div class="uk-width-1-3 uk-text-small uk-text-muted uk-text-left"># of Visits: <span class="uk-badge">' . $row['num_visits'] . '</span></div>
+              <div class="uk-width-1-3 uk-text-small uk-text-muted uk-text-center">Date Created: <strong>' . $row['date_created'] . '</strong></div>
+              <div class="uk-width-1-3 uk-text-small uk-text-muted uk-text-right">Last Visit: <strong>' . $row['last_visit'] . '</strong></div>
+            </div>
           </div>
           ';
         }
