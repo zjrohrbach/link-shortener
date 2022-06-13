@@ -1,6 +1,5 @@
 <?php
 include 'functions.php';
-use_this_db();
 ?>
 <!doctype html>
 <html lang="en">

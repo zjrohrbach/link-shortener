@@ -2,9 +2,8 @@
   include 'functions.php';
 
   $query = array (
-    'DROP DATABASE IF EXISTS ' . $dbname . ';',
-    'CREATE DATABASE ' . $dbname . ';',
-    'USE ' . $dbname . ';',
+    'DROP TABLE IF EXISTS visits;',
+    'DROP TABLE IF EXISTS redirects;',
     '
     CREATE TABLE redirects (
       link_id INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
@@ -59,15 +58,17 @@
           foreach ( $query as $this_statement ) {
             $connection->query($this_statement);
 
-            if ( $connection ) {
+            echo '<p><pre><code>' . $this_statement . '</code></pre>';
+
+            if ( $connection->connect_error ) {
               echo '
-                <p><pre><code>' . $this_statement . '</code></pre><span class="uk-label uk-label-success">SUCCESS!</span></p><hr />
-              ';
-            } else {
-              echo '
-                <p><pre><code>' . $this_statement . '</code></pre><span class="uk-label uk-label-danger">Error</span> ' . $connection->connect_error . '</p><hr />
+              <span class="uk-label uk-label-danger">Error</span> <br />' . $connection->connect_error . '</p><hr />
               ';
               break;
+            } else {
+              echo '
+                <span class="uk-label uk-label-success">SUCCESS!</span></p><hr />
+              ';
             }
 
           }
@@ -76,7 +77,7 @@
           echo '
             <form action="db_initialize.php" method="post">
               <p>
-                Submitting this form will override any database called `' . $dbname . '` that you have.  
+                Submitting this form will override all tables in your database.  
                 <strong>Please only procede if you are absolutely sure.</strong>
               </p>
               <button type="button" class="uk-button uk-label uk-label-danger" uk-tooltip="Initialize Database">Initialize Database</button>

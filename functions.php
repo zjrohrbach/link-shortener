@@ -1,23 +1,16 @@
 <?php
   //config
-  $base_url = "http://localhost:3000/index.php?goto=";
+  $base_url = "http://localhost:3000/index.php?goto=";  //On an apache server, this could be http://localhost:3000/path/to/this/dir/
   $alert_timeout = 3000;
   $dbhost = 'localhost';
   $dbuser = 'link-maker';
   $dbpass = 'rohrbachsci';
   $dbname = 'links';
 
-  $connection = new mysqli($dbhost, $dbuser, $dbpass);
+  $connection = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
 
   if ($connection->connect_error) {
     echo 'Connection to database failed: ' . $connection->connect_error;
-  }
-
-  //this is defined as a function so it does not need to be called by `db_initialize.php`
-  function use_this_db() {
-    global $connection, $dbname;
-
-    $connection->query('USE ' . $dbname . ';');
   }
 
 
