@@ -6,18 +6,19 @@
     'DROP TABLE IF EXISTS redirects;',
     '
     CREATE TABLE redirects (
-      link_id INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
+      link_id SMALLINT PRIMARY KEY AUTO_INCREMENT NOT NULL,
       slug VARCHAR(20),
       url VARCHAR(2048),
-      date_created TIMESTAMP
+      date_created TIMESTAMP,
+      INDEX(slug(10))
     );
     ',
     'INSERT INTO redirects (slug, url, date_created) VALUES ("ex", "https://www.example.com", NOW());',
     'INSERT INTO redirects (slug, url, date_created) VALUES ("goog", "https://www.google.com", NOW());',
     '
     CREATE TABLE visits (
-      visit_id INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
-      link_id INTEGER,
+      visit_id SMALLINT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+      link_id SMALLINT,
       referer VARCHAR(2048),
       visit_date TIMESTAMP,
       ip_addr varchar (15),
